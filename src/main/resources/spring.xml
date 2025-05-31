@@ -2,13 +2,17 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
                            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <!--组件扫描-->
     <context:component-scan base-package="com.wzres"/>
+
+    <bean id="userBean" class="com.wzres.domian.User"></bean>
 
     <!--配置数据源-->
     <bean id="druidDataSource" class="com.alibaba.druid.pool.DruidDataSource">
@@ -30,5 +34,14 @@
 
     <!--配置“事务注解驱动器”，开始注解的方式控制事务 -->
     <tx:annotation-driven transaction-manager="txManager" proxy-target-class="true"/>
+
+
+    <!--开启aspectj的自动代理-->
+    <!--spring容器在扫描类的时候，查看该类上是否有@Aspect注解，如果有，则给这个类生成代理对象。-->
+    <!--
+        proxy-target-class="true"  表示强制使用CGLIB动态代理
+        proxy-target-class="false" 这是默认值，表示接口使用JDK动态代理，反之使用CGLIB动态代理。
+     -->
+    <aop:aspectj-autoproxy proxy-target-class="false"/>
 
 </beans>
